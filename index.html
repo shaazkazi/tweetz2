@@ -17,6 +17,14 @@
         <section class="form-section" aria-labelledby="form-heading">
             <h2 id="form-heading" class="visually-hidden">Image Generation Options</h2>
             <form>
+                <div class="font-style-controls">
+                    <label for="font-bold">
+                        <input type="checkbox" id="font-bold"> Bold
+                    </label>
+                    <label for="font-italic">
+                        <input type="checkbox" id="font-italic"> Italic
+                    </label>
+                </div>
                 <div class="input-group">
                     <label for="text-input">Your Text:</label>
                     <textarea id="text-input" placeholder="Enter your text here (supports paragraphs)" aria-describedby="text-hint"></textarea>
@@ -28,7 +36,6 @@
                     <input type="text" id="reference-number" placeholder="e.g., REF123" aria-describedby="ref-hint">
                     <small id="ref-hint">Add a reference number to display on the image.</small>
                 </div>
-
                 <div class="input-group">
                     <label for="font-size">Base Font Size:</label>
                     <input type="range" id="font-size" min="20" max="150" value="50" aria-valuemin="20" aria-valuemax="150" aria-valuenow="50">
