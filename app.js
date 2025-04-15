@@ -136,28 +136,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Draw reference number (80–85%)
         if (referenceInput.value) {
-            const refLanguage = detectLanguage(referenceInput.value);
-            const refFontSize = Math.min(48, Math.max(16, canvasSize.height * 0.05 * 0.75));
-            ctx.font = `${refFontSize}px ${getFont(refLanguage)}, sans-serif`;
+            const refFontSize = Math.max(16, fontSize * 0.4);
+            ctx.font = `${refFontSize}px Inter, Arial, sans-serif`;
             ctx.fillText(`Ref: ${referenceInput.value}`, canvasSize.width / 2, canvasSize.height * 0.825);
-
-            // Draw divider below reference (at 8475%)
-            ctx.strokeStyle = currentScheme.textColor;
-            ctx.lineWidth = 2;
-            const dividerY = canvasSize.height * 0.875
-            const dividerWidth = canvasSize.width * 0.9;
-            ctx.beginPath();
-            ctx.moveTo(canvasSize.width / 2 - dividerWidth / 2, dividerY);
-            ctx.lineTo(canvasSize.width / 2 + dividerWidth / 2, dividerY);
-            ctx.stroke();
         }
 
         // Draw logo (85–100%)
         if (logoToggle.checked && logoLoaded) {
-            const logoHeight = canvasSize.height * 0.12;
+            const logoHeight = canvasSize.height * 0.15;
             const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
             const logoX = (canvasSize.width - logoWidth) / 2;
-            const logoY = canvasSize.height * 0.935 - logoHeight / 2;
+            const logoY = canvasSize.height * 0.925 - logoHeight / 2;
             ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
         }
 
