@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Image Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Text to Image Generator</h1>
+        <p>Transform your text into stunning images effortlessly.</p>
+    </header>
+
+    <main class="container">
+        <section class="form-section" aria-labelledby="form-heading">
+            <h2 id="form-heading" class="visually-hidden">Image Generation Options</h2>
+            <form>
+                <div class="input-group">
+                    <label for="text-input">Your Text:</label>
+                    <textarea id="text-input" placeholder="Enter your text here (supports paragraphs)" aria-describedby="text-hint"></textarea>
+                    <small id="text-hint">Enter text or paragraphs (max 1000 characters).</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="reference-number">Reference Number (Optional):</label>
+                    <input type="text" id="reference-number" placeholder="e.g., REF123" aria-describedby="ref-hint">
+                    <small id="ref-hint">Add a reference number to display on the image.</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="font-size">Base Font Size:</label>
+                    <input type="range" id="font-size" min="20" max="150" value="50" aria-valuemin="20" aria-valuemax="150" aria-valuenow="50">
+                    <span class="font-size-value">50px</span>
+                    <small>Font size auto-adjusts to fit the text area.</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="canvas-size">Canvas Size:</label>
+                    <select id="canvas-size" aria-describedby="size-hint">
+                        <option value="twitter">Twitter Post (1200x675)</option>
+                        <option value="instagram">Instagram Post (1080x1080)</option>
+                        <option value="insta-reel">Instagram Reel (1080x1920)</option>
+                    </select>
+                    <small id="size-hint">Choose the dimensions for your image.</small>
+                </div>
+
+                <div class="input-group color-schemes">
+                    <label>Color Scheme:</label>
+                    <div class="tab-controls" role="tablist" aria-label="Color scheme categories">
+                        <button type="button" class="tab-button active" data-tab="popular" role="tab" aria-selected="true" aria-controls="popular-tab">Popular</button>
+                        <button type="button" class="tab-button" data-tab="elegant" role="tab" aria-selected="false" aria-controls="elegant-tab">Elegant</button>
+                        <button type="button" class="tab-button" data-tab="bold" role="tab" aria-selected="false" aria-controls="bold-tab">Bold</button>
+                        <button type="button" class="tab-button" data-tab="soft" role="tab" aria-selected="false" aria-controls="soft-tab">Soft</button>
+                    </div>
+                    <div class="color-options">
+                        <!-- Popular Tab -->
+                        <div class="color-tab active" id="popular-tab" data-tab-content="popular" role="tabpanel" aria-labelledby="popular-tab-button">
+                            <div class="color-option" data-bg="#ffffff" data-text="#333333" role="radio" aria-checked="true" tabindex="0">
+                                <div class="color-preview" style="background: #ffffff; color: #333333">Aa</div>
+                                <span>Classic</span>
+                            </div>
+                            <div class="color-option" data-bg="#1a1a2e" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #1a1a2e; color: #ffffff">Aa</div>
+                                <span>Dark</span>
+                            </div>
+                            <div class="color-option" data-bg="#4cc9f0" data-text="#1a1a2e" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #4cc9f0; color: #1a1a2e">Aa</div>
+                                <span>Sky</span>
+                            </div>
+                            <div class="color-option" data-bg="#f72585" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #f72585; color: #ffffff">Aa</div>
+                                <span>Pink</span>
+                            </div>
+                            <div class="color-option" data-bg="#ffbe0b" data-text="#3a0ca3" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ffbe0b; color: #3a0ca3">Aa</div>
+                                <span>Vibrant</span>
+                            </div>
+                            <div class="color-option" data-bg="#8ecae6" data-text="#023047" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #8ecae6; color: #023047">Aa</div>
+                                <span>Ocean</span>
+                            </div>
+                            <div class="color-option" data-bg="#2a9d8f" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #2a9d8f; color: #ffffff">Aa</div>
+                                <span>Teal</span>
+                            </div>
+                            <div class="color-option" data-bg="#e9c46a" data-text="#264653" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #e9c46a; color: #264653">Aa</div>
+                                <span>Gold</span>
+                            </div>
+                            <div class="color-option" data-bg="#ff6f61" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ff6f61; color: #ffffff">Aa</div>
+                                <span>Coral</span>
+                            </div>
+                            <div class="color-option" data-bg="#00b4d8" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #00b4d8; color: #ffffff">Aa</div>
+                                <span>Bright Cyan</span>
+                            </div>
+                            <div class="color-option" data-bg="#f77f00" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #f77f00; color: #ffffff">Aa</div>
+                                <span>Orange Flame</span>
+                            </div>
+                            <div class="color-option" data-bg="#9d4edd" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #9d4edd; color: #ffffff">Aa</div>
+                                <span>Violet Pop</span>
+                            </div>
+                        </div>
+                        <!-- Elegant Tab -->
+                        <div class="color-tab" id="elegant-tab" data-tab-content="elegant" role="tabpanel" aria-labelledby="elegant-tab-button">
+                            <div class="color-option" data-bg="#1C1C1E" data-text="#FFFFFF" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #1C1C1E; color: #FFFFFF">Aa</div>
+                                <span>Dark Charcoal</span>
+                            </div>
+                            <div class="color-option" data-bg="#F5F5F5" data-text="#1A1A1A" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #F5F5F5; color: #1A1A1A">Aa</div>
+                                <span>Light Gray</span>
+                            </div>
+                            <div class="color-option" data-bg="#222831" data-text="#EEEEEE" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #222831; color: #EEEEEE">Aa</div>
+                                <span>Slate Black</span>
+                            </div>
+                            <div class="color-option" data-bg="#FAFAFA" data-text="#2E2E2E" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #FAFAFA; color: #2E2E2E">Aa</div>
+                                <span>Almost White</span>
+                            </div>
+                            <div class="color-option" data-bg="#2B2B2B" data-text="#D6D6D6" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #2B2B2B; color: #D6D6D6">Aa</div>
+                                <span>Charcoal</span>
+                            </div>
+                            <div class="color-option" data-bg="#F1F1F1" data-text="#1C1C1C" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #F1F1F1; color: #1C1C1C">Aa</div>
+                                <span>Neutral Gray</span>
+                            </div>
+                            <div class="color-option" data-bg="#3e3e3e" data-text="#f9f9f9" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #3e3e3e; color: #f9f9f9">Aa</div>
+                                <span>Slate Elegance</span>
+                            </div>
+                            <div class="color-option" data-bg="#ececec" data-text="#2a2a2a" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ececec; color: #2a2a2a">Aa</div>
+                                <span>Platinum</span>
+                            </div>
+                        </div>
+                        <!-- Bold Tab -->
+                        <div class="color-tab" id="bold-tab" data-tab-content="bold" role="tabpanel" aria-labelledby="bold-tab-button">
+                            <div class="color-option" data-bg="#0F0F0F" data-text="#00FFE0" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #0F0F0F; color: #00FFE0">Aa</div>
+                                <span>Black/Aqua</span>
+                            </div>
+                            <div class="color-option" data-bg="#1E1E2F" data-text="#F9F9F9" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #1E1E2F; color: #F9F9F9">Aa</div>
+                                <span>Midnight Blue</span>
+                            </div>
+                            <div class="color-option" data-bg="#101820" data-text="#FEE715" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #101820; color: #FEE715">Aa</div>
+                                <span>Navy/Yellow</span>
+                            </div>
+                            <div class="color-option" data-bg="#2C3A47" data-text="#F8EFBA" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #2C3A47; color: #F8EFBA">Aa</div>
+                                <span>Steel/Gold</span>
+                            </div>
+                            <div class="color-option" data-bg="#ff0054" data-text="#ffffff" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ff0054; color: #ffffff">Aa</div>
+                                <span>Neon Pink</span>
+                            </div>
+                            <div class="color-option" data-bg="#6a0dad" data-text="#f8f8f8" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #6a0dad; color: #f8f8f8">Aa</div>
+                                <span>Purple Blaze</span>
+                            </div>
+                            <div class="color-option" data-bg="#ffbd00" data-text="#1a1a1a" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ffbd00; color: #1a1a1a">Aa</div>
+                                <span>Sun Gold</span>
+                            </div>
+                        </div>
+                        <!-- Soft Tab -->
+                        <div class="color-tab" id="soft-tab" data-tab-content="soft" role="tabpanel" aria-labelledby="soft-tab-button">
+                            <div class="color-option" data-bg="#FFEFEF" data-text="#333333" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #FFEFEF; color: #333333">Aa</div>
+                                <span>Blush Pink</span>
+                            </div>
+                            <div class="color-option" data-bg="#E8F6EF" data-text="#1C1C1C" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #E8F6EF; color: #1C1C1C">Aa</div>
+                                <span>Mint Cream</span>
+                            </div>
+                            <div class="color-option" data-bg="#DDE6ED" data-text="#27374D" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #DDE6ED; color: #27374D">Aa</div>
+                                <span>Soft Blue-Gray</span>
+                            </div>
+                            <div class="color-option" data-bg="#F7EFE5" data-text="#3F3F3F" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #F7EFE5; color: #3F3F3F">Aa</div>
+                                <span>Warm Beige</span>
+                            </div>
+                            <div class="color-option" data-bg="#F3E9DD" data-text="#3E3E3E" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #F3E9DD; color: #3E3E3E">Aa</div>
+                                <span>Warm Cream</span>
+                            </div>
+                            <div class="color-option" data-bg="#E4DCCF" data-text="#2B2B2B" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #E4DCCF; color: #2B2B2B">Aa</div>
+                                <span>Muted Sand</span>
+                            </div>
+                            <div class="color-option" data-bg="#FFF3F3" data-text="#3D3D3D" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #FFF3F3; color: #3D3D3D">Aa</div>
+                                <span>Soft Peach</span>
+                            </div>
+                            <div class="color-option" data-bg="#E0F4FF" data-text="#1F1F1F" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #E0F4FF; color: #1F1F1F">Aa</div>
+                                <span>Baby Blue</span>
+                            </div>
+                            <div class="color-option" data-bg="#BFD8AF" data-text="#1F1F1F" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #BFD8AF; color: #1F1F1F">Aa</div>
+                                <span>Sage Green</span>
+                            </div>
+                            <div class="color-option" data-bg="#FFCACC" data-text="#2F2F2F" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #FFCACC; color: #2F2F2F">Aa</div>
+                                <span>Blush Rose</span>
+                            </div>
+                            <div class="color-option" data-bg="#ffe5ec" data-text="#3d3d3d" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #ffe5ec; color: #3d3d3d">Aa</div>
+                                <span>Soft Blush</span>
+                            </div>
+                            <div class="color-option" data-bg="#c9e4de" data-text="#2a2a2a" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #c9e4de; color: #2a2a2a">Aa</div>
+                                <span>Sea Foam</span>
+                            </div>
+                            <div class="color-option" data-bg="#fff0f5" data-text="#222222" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #fff0f5; color: #222222">Aa</div>
+                                <span>Lavender Mist</span>
+                            </div>
+                            <div class="color-option" data-bg="#f0f5f9" data-text="#222222" role="radio" aria-checked="false" tabindex="-1">
+                                <div class="color-preview" style="background: #f0f5f9; color: #222222">Aa</div>
+                                <span>Ice Blue</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group toggle">
+                    <label class="logo-toggle-label" for="logo-toggle">
+                        <span class="toggle-text">Include Logo</span>
+                        <div class="toggle-container">
+                            <input type="checkbox" id="logo-toggle" checked aria-label="Toggle logo inclusion in image">
+                            <span class="toggle-switch"></span>
+                        </div>
+                    </label>
+                </div>
+
+                <button type="button" id="generate-button" aria-label="Generate image from text"><i class="fas fa-magic"></i> Generate</button>
+            </form>
+        </section>
+
+        <section class="canvas-section" aria-labelledby="canvas-heading">
+            <h2 id="canvas-heading" class="visually-hidden">Generated Image</h2>
+            <canvas id="canvas"></canvas>
+            <div class="canvas-actions">
+                <button id="download-button" aria-label="Download generated image"><i class="fas fa-download"></i> Download</button>
+                <button id="copy-button" aria-label="Copy generated image to clipboard"><i class="fas fa-copy"></i> Copy</button>
+                <button id="new-image-button" aria-label="Create new image"><i class="fas fa-file"></i> New Image</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Text to Image Generator | Crafted with <i class="fas fa-heart"></i></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
