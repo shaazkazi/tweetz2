@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const referenceInput = document.getElementById("reference-number");
     const fontSizeInput = document.getElementById("font-size");
     const fontSizeValue = document.querySelector(".font-size-value");
+    const fontBold = document.getElementById("font-bold");
+    const fontItalic = document.getElementById("font-italic");
     const canvasSizeSelect = document.getElementById("canvas-size");
     const logoToggle = document.getElementById("logo-toggle");
     const tabButtons = document.querySelectorAll(".tab-button");
@@ -30,6 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentScheme = { backgroundColor: "#ffffff", textColor: "#333333" };
     let canvasSize = { width: 1200, height: 675 }; // Default: Twitter post
+
+    // Get font string
+    const getFontString = (fontSize) => {
+        const weight = fontBold.checked ? "700" : "400";
+        const style = fontItalic.checked ? "italic" : "normal";
+        return `${style} ${weight} ${fontSize}px Inter, Arial, sans-serif`;
+    };
 
     // Set canvas size based on selection
     const setCanvasSize = (size) => {
@@ -68,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const words = paragraph.split(" ");
             for (let n = 0; n < words.length; n++) {
                 const testLine = line + words[n] + " ";
-                context.font = `${fontSize}px Inter, Arial, sans-serif`;
+                context.font = getFontString(fontSize);
                 const metrics = context.measureText(testLine);
                 const testWidth = metrics.width;
                 if (testWidth > maxWidth && n > 0) {
@@ -128,25 +137,36 @@ document.addEventListener("DOMContentLoaded", () => {
             const y = startY + i * lineHeight;
             if (y + lineHeight <= textAreaHeight) {
                 if (line) {
-                    ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
+                    ctx.font = getFontString(fontSize);
                     ctx.fillText(line, canvasSize.width / 2, y);
                 }
             }
         });
 
-        // Draw reference number (80–85%)
+        // Draw reference number (80–84%, 1px above divider)
         if (referenceInput.value) {
-            const refFontSize = Math.max(16, fontSize * 0.4);
-            ctx.font = `${refFontSize}px Inter, Arial, sans-serif`;
-            ctx.fillText(`Ref: ${referenceInput.value}`, canvasSize.width / 2, canvasSize.height * 0.825);
+            const refFontSize = Math.max(14, fontSize * 0.35);
+            ctx.font = getFontString(refFontSize);
+            const dividerY = canvasSize.height * 0.84;
+            const refY = dividerY - 1 - refFontSize; // Bottom edge 1px above divider
+            ctx.fillText(`Ref: ${referenceInput.value}`, canvasSize.width / 2, refY);
+
+            // Draw divider below reference (at 84%)
+            ctx.strokeStyle = currentScheme.textColor;
+            ctx.lineWidth = 2;
+            const dividerWidth = canvasSize.width * 0.9;
+            ctx.beginPath();
+            ctx.moveTo(canvasSize.width / 2 - dividerWidth / 2, dividerY);
+            ctx.lineTo(canvasSize.width / 2 + dividerWidth / 2, dividerY);
+            ctx.stroke();
         }
 
-        // Draw logo (85–100%)
+        // Draw logo (84–97%)
         if (logoToggle.checked && logoLoaded) {
-            const logoHeight = canvasSize.height * 0.15;
+            const logoHeight = canvasSize.height * 0.13;
             const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
             const logoX = (canvasSize.width - logoWidth) / 2;
-            const logoY = canvasSize.height * 0.925 - logoHeight / 2;
+            const logoY = canvasSize.height * 0.905 - logoHeight / 2;
             ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
         }
 
@@ -218,11 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
     referenceInput.addEventListener("input", debounce(drawImage, 300));
     logoToggle.addEventListener("change", drawImage);
     canvasSizeSelect.addEventListener("change", () => setCanvasSize(canvasSizeSelect.value));
-
     fontSizeInput.addEventListener("input", () => {
         fontSizeValue.textContent = `${fontSizeInput.value}px`;
         drawImage();
     });
+    fontBold.addEventListener("change", drawImage);
+    fontItalic.addEventListener("change", drawImage);
 
     document.querySelectorAll(".color-option").forEach((option) => {
         option.addEventListener("click", (e) => {
@@ -275,6 +296,8 @@ document.addEventListener("DOMContentLoaded", () => {
         referenceInput.value = "";
         fontSizeInput.value = 50;
         fontSizeValue.textContent = "50px";
+        fontBold.checked = false;
+        fontItalic.checked = false;
         canvasSizeSelect.value = "twitter";
         logoToggle.checked = true;
         updateColorScheme("#ffffff", "#333333");
