@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const referenceInput = document.getElementById("reference-number");
     const fontSizeInput = document.getElementById("font-size");
     const fontSizeValue = document.querySelector(".font-size-value");
+    const refFontSizeInput = document.getElementById("ref-font-size");
+    const refFontSizeValue = document.querySelector(".ref-font-size-value");
     const fontBold = document.getElementById("font-bold");
     const fontItalic = document.getElementById("font-italic");
     const canvasSizeSelect = document.getElementById("canvas-size");
@@ -145,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Draw reference number (80–84%, 1px above divider)
         if (referenceInput.value) {
-            const refFontSize = Math.max(14, fontSize * 0.35);
+            const refFontSize = parseInt(refFontSizeInput.value) || 20;
             ctx.font = getFontString(refFontSize);
             const dividerY = canvasSize.height * 0.84;
             const refY = dividerY - 1 - refFontSize; // Bottom edge 1px above divider
@@ -242,6 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
         fontSizeValue.textContent = `${fontSizeInput.value}px`;
         drawImage();
     });
+    refFontSizeInput.addEventListener("input", () => {
+        refFontSizeValue.textContent = `${refFontSizeInput.value}px`;
+        drawImage();
+    });
     fontBold.addEventListener("change", drawImage);
     fontItalic.addEventListener("change", drawImage);
 
@@ -296,6 +302,8 @@ document.addEventListener("DOMContentLoaded", () => {
         referenceInput.value = "";
         fontSizeInput.value = 50;
         fontSizeValue.textContent = "50px";
+        refFontSizeInput.value = 20;
+        refFontSizeValue.textContent = "20px";
         fontBold.checked = false;
         fontItalic.checked = false;
         canvasSizeSelect.value = "twitter";
