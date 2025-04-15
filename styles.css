@@ -659,3 +659,110 @@ canvas {
 .logo-toggle-label:focus-within .toggle-switch {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
+/* Optional container for grouping bold/italic controls */
+.font-style-controls {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 15px;
+}
+
+/* Label styles */
+label[for="font-bold"],
+label[for="font-italic"] {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #e0e0e0; /* Light gray for dark mode */
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background-color: #2a2a2a; /* Darker shade for depth */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Checkbox input */
+input[type="checkbox"]#font-bold,
+input[type="checkbox"]#font-italic {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #606060; /* Muted gray border */
+    border-radius: 4px;
+    background-color: #1a1a1a; /* Matches dark background */
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Checked state */
+input[type="checkbox"]#font-bold:checked,
+input[type="checkbox"]#font-italic:checked {
+    background-color: #4a90e2; /* Blue accent for checked state */
+    border-color: #4a90e2;
+}
+
+/* Checkmark */
+input[type="checkbox"]#font-bold:checked::after,
+input[type="checkbox"]#font-italic:checked::after {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 10px;
+}
+
+/* Hover effect */
+label[for="font-bold"]:hover,
+label[for="font-italic"]:hover {
+    background-color: #3a3a3a;
+    transform: translateY(-1px); /* Subtle lift */
+}
+
+/* Focus effect for accessibility */
+input[type="checkbox"]#font-bold:focus-visible,
+input[type="checkbox"]#font-italic:focus-visible {
+    box-shadow: 0 0 0 2px #4a90e2; /* Blue focus ring */
+}
+
+/* Disabled state (optional) */
+input[type="checkbox"]#font-bold:disabled,
+input[type="checkbox"]#font-italic:disabled {
+    border-color: #4a4a4a;
+    background-color: #2a2a2a;
+    cursor: not-allowed;
+}
+
+label[for="font-bold"]:has(input:disabled),
+label[for="font-italic"]:has(input:disabled) {
+    color: #606060;
+    cursor: not-allowed;
+    background-color: #2a2a2a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .font-style-controls {
+        flex-direction: row; /* Keep horizontal for simplicity */
+        gap: 8px;
+        margin: 8px 0;
+    }
+
+    label[for="font-bold"],
+    label[for="font-italic"] {
+        font-size: 14px;
+        padding: 4px 6px;
+    }
+
+    input[type="checkbox"]#font-bold,
+    input[type="checkbox"]#font-italic {
+        width: 14px;
+        height: 14px;
+    }
+}
