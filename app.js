@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 canvasSize = { width: 1080, height: 1920 };
                 break;
         }
-        // Adjust for high-DPI displays
         const scale = window.devicePixelRatio || 1;
         canvas.width = canvasSize.width * scale;
         canvas.height = canvasSize.height * scale;
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         paragraphs.forEach((paragraph) => {
             if (paragraph.trim() === "") {
-                lines.push("");
+                lines.push(""); // Empty line for paragraph break
                 return;
             }
             let line = "";
@@ -85,16 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return { lines, lineHeight };
     };
 
-    // Calculate text height and adjust font size
+    // Calculate text height and adjust font size to fit within maxHeight
     const fitText = (context, text, maxWidth, maxHeight, baseFontSize) => {
         let fontSize = baseFontSize;
         let result;
 
         do {
             result = wrapText(context, text, canvasSize.width / 2, maxWidth, fontSize);
-            const totalHeight = result.lines.length * result.lineHeight;
+            const totalHeight = result.lines.length * result.lineHeight; // Count all lines (text + blank)
             if (totalHeight <= maxHeight || fontSize <= 20) break;
-            fontSize -= 2;
+            fontSize -= 2; // Reduce font size to fit
         } while (fontSize > 20);
 
         return { lines: result.lines, fontSize, lineHeight: result.lineHeight };
@@ -102,40 +101,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Draw the image on the canvas
     const drawImage = () => {
-        // Clear canvas
         ctx.fillStyle = currentScheme.backgroundColor;
         ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
 
-        // Draw main text (80% of canvas height)
+        // Draw main text (0–80% of canvas height)
         const text = textInput.value || "Your Text Here";
-        const textAreaHeight = canvasSize.height * 0.8;
+        const textAreaHeight = canvasSize.height * 0.8; // 540px for Twitter
         const maxWidth = canvasSize.width * 0.9;
         const baseFontSize = parseInt(fontSizeInput.value) || 50;
         const { lines, fontSize, lineHeight } = fitText(ctx, text, maxWidth, textAreaHeight, baseFontSize);
 
         ctx.fillStyle = currentScheme.textColor;
         ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        ctx.textBaseline = "top"; // Use top baseline for precise control
         const totalTextHeight = lines.length * lineHeight;
-        let startY = (textAreaHeight - totalTextHeight) / 2 + lineHeight / 2;
+
+        // Start drawing at top of text area (with padding)
+        let startY = (textAreaHeight - totalTextHeight) / 2;
+        if (startY < 0) startY = 0; // Prevent negative start (cap at top)
 
         lines.forEach((line, i) => {
-            if (line) {
-                ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
-                ctx.fillText(line, canvasSize.width / 2, startY + i * lineHeight);
-            } else {
-                startY += lineHeight; // Empty line for paragraph spacing
+            const y = startY + i * lineHeight;
+            if (y + lineHeight <= textAreaHeight) { // Only draw within 80%
+                if (line) {
+                    ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
+                    ctx.fillText(line, canvasSize.width / 2, y);
+                }
             }
         });
 
-        // Draw reference number (5% of canvas height, at 80–85%)
+        // Draw reference number (80–85%)
         if (referenceInput.value) {
             const refFontSize = Math.max(16, fontSize * 0.4);
             ctx.font = `${refFontSize}px Inter, Arial, sans-serif`;
             ctx.fillText(`Ref: ${referenceInput.value}`, canvasSize.width / 2, canvasSize.height * 0.825);
         }
 
-        // Draw logo (15% of canvas height, at 85–100%)
+        // Draw logo (85–100%)
         if (logoToggle.checked && logoLoaded) {
             const logoHeight = canvasSize.height * 0.15;
             const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
@@ -210,9 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Event Listeners
     textInput.addEventListener("input", debounce(drawImage, 300));
     referenceInput.addEventListener("input", debounce(drawImage, 300));
-
-    logoToggle.addEventListener("change", drawImage); // Removed unnecessary class toggle
-
+    logoToggle.addEventListener("change", drawImage);
     canvasSizeSelect.addEventListener("change", () => setCanvasSize(canvasSizeSelect.value));
 
     fontSizeInput.addEventListener("input", () => {
@@ -275,7 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
         logoToggle.checked = true;
         updateColorScheme("#ffffff", "#333333");
 
-        // Reset tabs to Popular
         tabButtons.forEach((btn) => {
             btn.classList.remove("active");
             btn.setAttribute("aria-selected", "false");
