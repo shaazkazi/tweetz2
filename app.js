@@ -89,11 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let fontSize = baseFontSize;
         let result;
 
+        // Adjust maxHeight for 1% top margin
+        const effectiveMaxHeight = maxHeight - (canvasSize.height * 0.01);
+
         do {
             result = wrapText(context, text, canvasSize.width / 2, maxWidth, fontSize);
-            const totalHeight = result.lines.length * result.lineHeight; // Count all lines (text + blank)
-            if (totalHeight <= maxHeight || fontSize <= 20) break;
-            fontSize -= 2; // Reduce font size to fit
+            const totalHeight = result.lines.length * result.lineHeight;
+            if (totalHeight <= effectiveMaxHeight || fontSize <= 20) break;
+            fontSize -= 2;
         } while (fontSize > 20);
 
         return { lines: result.lines, fontSize, lineHeight: result.lineHeight };
@@ -104,25 +107,26 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = currentScheme.backgroundColor;
         ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
 
-        // Draw main text (0–80% of canvas height)
+        // Draw main text (0–80% with 1% top margin)
         const text = textInput.value || "Your Text Here";
         const textAreaHeight = canvasSize.height * 0.8; // 540px for Twitter
+        const topMargin = canvasSize.height * 0.01; // 6.75px
         const maxWidth = canvasSize.width * 0.9;
         const baseFontSize = parseInt(fontSizeInput.value) || 50;
         const { lines, fontSize, lineHeight } = fitText(ctx, text, maxWidth, textAreaHeight, baseFontSize);
 
         ctx.fillStyle = currentScheme.textColor;
         ctx.textAlign = "center";
-        ctx.textBaseline = "top"; // Use top baseline for precise control
+        ctx.textBaseline = "top";
         const totalTextHeight = lines.length * lineHeight;
 
-        // Start drawing at top of text area (with padding)
-        let startY = (textAreaHeight - totalTextHeight) / 2;
-        if (startY < 0) startY = 0; // Prevent negative start (cap at top)
+        // Start with 1% margin, center in remaining space
+        let startY = topMargin + (textAreaHeight - totalTextHeight - topMargin) / 2;
+        if (startY < topMargin) startY = topMargin;
 
         lines.forEach((line, i) => {
             const y = startY + i * lineHeight;
-            if (y + lineHeight <= textAreaHeight) { // Only draw within 80%
+            if (y + lineHeight <= textAreaHeight) {
                 if (line) {
                     ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
                     ctx.fillText(line, canvasSize.width / 2, y);
